@@ -21,6 +21,7 @@
     "mongoose": "^7.4.5",
     "morgan": "^1.10.0",
     "swagger-ui-express": "^5.0.0",
+    "validator": "^13.11.0",
     "yaml": "^2.3.2"
   }
 }

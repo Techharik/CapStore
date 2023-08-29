@@ -5,6 +5,9 @@ import cookieParser from 'cookie-parser';
 import cloudinary from 'cloudinary';
 import fileUpload from 'express-fileupload';
 import morgan from 'morgan';
+
+
+//swagger-API
 import swaggerUi from 'swagger-ui-express';
 import fs from "fs"
 import YAML from 'yaml'
@@ -25,10 +28,12 @@ app.use(fileUpload(
     }
 ))
 
+//morgan middleware
 app.use(morgan("tiny"));
 
 
-import home from './server/routes/homeRoutes.js'
+
+import home from './server/routes/userRoutes.js'
 import product from './server/routes/productRoutes.js'
 
 
