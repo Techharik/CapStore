@@ -1,0 +1,26 @@
+{
+  "name": "pro_backend_capstone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "run": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.40.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^7.4.5",
+    "morgan": "^1.10.0",
+    "swagger-ui-express": "^5.0.0",
+    "yaml": "^2.3.2"
+  }
+}
