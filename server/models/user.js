@@ -20,6 +20,7 @@ const userSchema = new Schema({
     password:{
         type:String,
         required:[true,'Please provide the password'],
+        validate:[validator.isStrongPassword,'Please provide a stron password to login'],
         select:false
     },
     role:{

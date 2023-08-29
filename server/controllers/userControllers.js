@@ -14,7 +14,13 @@ const signup = BigPromises(async(req,res,next)=>{
  const { name, email, password } = req.body;
 
   if (!email || !name || !password) {
-    return next(new CustomError("Name, email and password are required", 400));
+    return next(new Error("Name, email and password are required", 400));
+  }
+
+  const userExits = User.findOne({email})
+
+  if(!userExits){
+    return next(new Error('User is already Exited'))
   }
 
   let file = req.files.photo;

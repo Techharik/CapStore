@@ -51,7 +51,7 @@ app.use('/api/v1',product)
 
 
 
-app.get('/api/v1',(req,res)=>{
+app.get('/',(req,res)=>{
     res.status(201).json({message:'Welcome to Api '})
 })
 
