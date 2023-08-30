@@ -38,9 +38,8 @@ const signup = BigPromises(async(req,res,next)=>{
     photo:{
         id:result.public_id,
         secureUrl:result.secure_url
-    },
-  })
-  
+    }
+  }) 
    await user.save()
 
   cookieToken(user,res)
