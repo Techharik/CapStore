@@ -4,7 +4,6 @@ import cookieToken from "../utils/cookieToken.js"
 import User from '../models/user.js'
 import mailer from "../utils/mailer.js";
 import crypto from 'crypto'
-import { decode } from "punycode";
 
 const signup = BigPromises(async(req,res,next)=>{
 
@@ -171,6 +170,20 @@ const passwordReset = BigPromises( async (req, res, next )=>{
 })
 
 
+const userDetails = BigPromises(async (req, res, next) =>{
+    const id = req.user.id;
+
+    const user = await User.findById(req.user.id);
+
+    res.status(200).json({
+      success:true,
+      user
+    })
+
+
+
+})
+
 
 
 
@@ -186,5 +199,6 @@ export {
     login,
     logout,
     forgotPassword,
-    passwordReset
+    passwordReset,
+    userDetails
 }
