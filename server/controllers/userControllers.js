@@ -3,6 +3,8 @@ import {v2 as cloudinary} from 'cloudinary';
 import cookieToken from "../utils/cookieToken.js"
 import User from '../models/user.js'
 import mailer from "../utils/mailer.js";
+import crypto from 'crypto'
+import { decode } from "punycode";
 
 const signup = BigPromises(async(req,res,next)=>{
 
@@ -135,11 +137,38 @@ const forgotPassword = BigPromises(async (req,res,next) =>{
 
 
 
+const passwordReset = BigPromises( async (req, res, next )=>{
+ const resetToken = req.params.token
+ const {newpassword} = req.body
+ const decodeToken = await crypto
+ .createHash("sha256")
+ .update(resetToken)
+ .digest("hex")
+ console.log(decodeToken)
 
+ const user =await User.findOne({
+  forgottedPasswordToken:decodeToken,
+  forgotPasswordExpiry:{ $gt: Date.now() }
+ })
 
+ if(!user){
+  return next(new Error('Check the token given or genrate new token',404))
+ }
+ 
+ user.password = newpassword;
 
+ user.forgotPasswordToken = undefined;
+ user.forgotPasswordExpiry = undefined;
 
+ await user.save();
 
+ res.status(200).json({
+  success:true,
+  message:'Password Reseted Successfully'
+ })
+
+ 
+})
 
 
 
@@ -157,4 +186,5 @@ export {
     login,
     logout,
     forgotPassword,
+    passwordReset
 }
