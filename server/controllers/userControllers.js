@@ -2,6 +2,7 @@ import BigPromises from "../middlewares/BigPromises.js"
 import {v2 as cloudinary} from 'cloudinary';
 import cookieToken from "../utils/cookieToken.js"
 import User from '../models/user.js'
+import mailer from "../utils/mailer.js";
 
 const signup = BigPromises(async(req,res,next)=>{
 
@@ -86,18 +87,52 @@ const logout = BigPromises(async(req,res,next)=>{
 
 })
 
-const forgotPassword = BigPromises(async(req,res,next)=>{
+
+
+const forgotPassword = BigPromises(async (req,res,next) =>{
   const {email} = req.body
 
  const user = await User.findOne({email})
 
  if(!user){
-  return next(new Error('user not found, Enter a valid Email Adress'))
+  return next(new Error('user not found, Enter a valid Email Adress',400))
  }
 
- 
+  const forgotToken = await user.getForgotPasswordToken()
+
+  await user.save({ validateBeforeSave: false })
+
+  const myUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/api/v1/password/reset/${forgotToken}`;
+
+  const message = `Please copy the link and paste it in the browser to rest your password. ${myUrl}`;
+
+  try{
+  const sendMail = await mailer({
+    email:user.email,
+    subject:'Password rest link is send in this Email',
+    message
+  })
+
+  await res.status(404).json({
+    success:true,
+    messgae:'Reset Link send Successfully'
+  })
+
+  }catch(e){
+   
+    user.forgottedPasswordToken = undefined;
+    user.forgotPasswordExpiry = undefined;
+    await user.save();
+
+    return next(new Error(e,400))
+  }
+
+
 
 })
+
 
 
 
@@ -120,5 +155,6 @@ const forgotPassword = BigPromises(async(req,res,next)=>{
 export {
     signup,
     login,
-    logout
+    logout,
+    forgotPassword,
 }

@@ -49,7 +49,7 @@ const userSchema = new Schema({
 
 //encrypt password
 
-userSchema.pre('save',async function(req,res,next){
+userSchema.pre('save',async function(next){
     if(!this.isModified('password')){
         return next()
     }
@@ -74,7 +74,7 @@ userSchema.methods.getJwtToken=function(){
 userSchema.methods.getForgotPasswordToken=function(){
     const forgotToken = crypto.randomBytes(20).toString("hex");
 
-    this.forgotPasswordToken = crypto
+    this.forgottedPasswordToken = crypto
     .createHash("sha256")
     .update(forgotToken)
     .digest("hex");
