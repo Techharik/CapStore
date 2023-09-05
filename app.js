@@ -1,5 +1,4 @@
 import 'dotenv/config'
-import express from 'express';
 import app from './index.js'
 import dbConnect from './server/db/config.js/config.js';
 import {v2 as cloudinary} from 'cloudinary';
