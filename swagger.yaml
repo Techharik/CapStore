@@ -80,3 +80,372 @@ paths:
         500:
             description: Internal Server Error
 
+  /login:
+    post:
+      tags:
+        - User
+      summary: Login user 
+      requestBody:
+        required: true
+        content: 
+          application/json:
+              schema:
+                  type: object
+                  properties:
+                      email:
+                        type: string
+                        required: true
+                      password:
+                        type: number
+                        required: true
+
+
+      responses:
+        200:
+          description: getting user 
+          content:
+            abblication/json:
+              schema:
+                  success: 
+                    type: boolean
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      role:
+                        type: string
+                      photo:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          secure_url:
+                            type: string
+                      _id:
+                        type: string
+                      createdAt:
+                        type: string 
+        400:
+            description: Bad Request
+        500:
+            description: Internal Server Error
+
+  /logout:
+    get:
+      tags:
+        - User
+      summary: Logout user  
+
+      responses:
+        200:
+          description: Logged all user 
+          content:
+            abblication/json:
+              schema:
+                  success: 
+                    type: boolean
+                  message:
+                    type: string
+                  
+        400:
+            description: Bad Request
+        500:
+            description: Internal Server Error
+
+  /forgotpassword:
+    post:
+      tags:
+        - User
+      summary: forgotpassword sending email to reset user Passowrd 
+      requestBody:
+        required: true
+        content: 
+          application/json:
+              schema:
+                  type: object
+                  properties:
+                      email:
+                        type: string
+                        required: true
+                      
+
+
+      responses:
+        200:
+          description: reset link Status
+          content:
+            abblication/json:
+              schema:
+                  success: 
+                    type: boolean
+                    message: string
+                      
+        400:
+            description: Bad Request
+        500:
+            description: Internal Server Error
+
+  /password/reset/{token}:
+    post:
+      tags:
+        - User
+      summary: Update new password using the email link token
+      parameters:
+       - name: token
+         in: path
+         required: true
+         schema:
+           type: string
+            
+      requestBody:
+        required: true
+        content: 
+          application/json:
+              schema:
+                  type: object
+                  properties:
+                      newpassword:
+                        type: string
+                        required: true
+                      
+
+
+      responses:
+        200:
+          description: reset link Status
+          content:
+            abblication/json:
+              schema:
+                  success: 
+                    type: boolean
+                    message: string
+                      
+        400:
+            description: Bad Request
+        500:
+            description: Internal Server Error
+  
+  /userdashboard:
+    get:
+      tags:
+        - User
+      summary: Getting the information about the user  
+
+      responses:
+        200:
+          description: Logged all user 
+          content:
+            application/json:
+              schema:
+                  success: 
+                    type: boolean
+                  user:
+                    type: object
+                  
+        400:
+            description: Bad Request
+        500:
+            description: Internal Server Error
+  
+  /updatepassword:
+        post: 
+          tags:
+             - User
+          summary: Updating the new password from the dashbaord
+
+          requestBody:
+             required: true
+             content:
+              application/json:
+                schema:
+                   type: object
+                   required: true
+                   properties:
+                      oldpassword:
+                        type: string
+                      newpassword:
+                        type: string
+          
+          responses:
+            200:
+              description: Password Update Status
+              content:
+                application/json:
+                   schema:
+                      success:
+                        type: boolean
+                      message:
+                        type: string
+                      user:
+                        type: object
+            400:
+               description: Bad Request
+            500:
+               description: Internal Server Error
+
+  /updatedetails:
+      post:
+        tags:
+          - User
+        summary: Upadating the user details from the dashbaord
+
+        requestBody:
+           content:
+             multipart/form-data:
+              schema:
+                type:
+                  object
+                required:
+                  - name
+                  - email
+                properties:
+                  name:
+                      type: string
+                  email:
+                      type: string
+                  photo:
+                      in: formData
+                      description: The uploaded file data
+                      type: file
+                      format: binary
+        responses:
+            200:
+              description: 'Update the userdetails from dashboard'
+              content:
+               multipart/form-data:
+                schema:
+                  type: object
+                  properties:
+                    success:
+                      type: string
+                    message: 
+                      type: string
+                    user : 
+                      type: object
+            400:
+               description: Bad Request
+            500:
+               description: Internal Server Error
+
+  /adminallusers:
+     get:
+       tags:
+         - Admin
+       summary: Get the list of all the users
+       
+       responses:
+         200:
+           description: Getting the list of all the users
+           content:
+            application/json:
+              schema:
+                  success: 
+                    type: boolean
+                  user:
+                    type: object
+  
+  /admin/users/{id}:
+    get:
+      tags:
+        - Admin
+      summary: Get the Single user as a user_Id
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      
+      responses:
+         200:
+           description: Getting a single User
+           content:
+             application/json:
+               schema:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  user:
+                    type: object
+
+    put:
+      tags:
+        - Admin
+      summary: Update the Single user as a user_Id
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+         content:
+           application/json:
+              schema:
+                type: object
+                properties:
+                    name:
+                      type: string
+                      requires: true
+                    email:
+                      type: string
+                      requires: true
+                    role:
+                      type: string
+                      requires: true
+      
+      responses:
+         200:
+           description: Getting a single User
+           content:
+             application/json:
+               schema:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  user:
+                    type: object
+      
+
+    delete:
+         tags:
+            - Admin
+         summary: Delete the user based on the user_id
+
+         parameters:
+            - name : id
+              in   : path
+              required : true
+              schema:
+                type: string
+
+         responses:
+           200:
+             description: Delete status of the user
+             content:
+               application/json:
+                 schema:
+                   type: object
+                   properties:
+                     success:
+                       type: boolean
+                     message:
+                       type: string
+                     user:
+                       type: object
+           400:
+             description: Bad Reuqest
+           500:
+             description: Internal server Error
+             
+
