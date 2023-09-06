@@ -180,10 +180,77 @@ const userDetails = BigPromises(async (req, res, next) =>{
       user
     })
 
-
-
 })
 
+const updatePassword = BigPromises(async(req,res, next)=>{
+  const id = req.user.id;
+
+  const user = await User.findById(id).select("+password");
+
+ const oldPasswordCheck = user.isValidatePassword(req.body.oldPassword)
+
+  if(!oldPasswordCheck){
+    return next(new Error("Old password is incorrect",402))
+  }
+
+  const newPassword = req.body.newpassword
+
+  user.password = newPassword;
+
+  await user.save();
+  
+  res.status(200).json({
+    success:true,
+    message:'Password Updated Successfully',
+    user
+  })
+})
+
+
+const updateDetails = BigPromises(async(req, res, next)=>{
+  
+   const newDetails = {
+    name:req.body.name,
+    email:req.body.email
+   }
+
+  if(req.files){
+    const user = await User.findById(req.user.id);
+
+    const ImageId = user.photo.id;
+
+    const destoryImage = await cloudinary.uploader.destroy(ImageId)
+
+    const uploadNewImage = await cloudinary.uploader.upload(req.files.photo.tempFilePath,{
+      folder: "userCoustomers",
+      width: 150,
+      crop: "scale",
+    })
+
+    const photo = {
+      id: uploadNewImage.public_id,
+      secureUrl:uploadNewImage.secure_url
+    }
+
+    newDetails.photo = photo;
+
+
+  }
+  const user = await User.findByIdAndUpdate(req.user.id,newDetails,{
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  })
+
+  await user.save()
+ 
+  res.status(200).json({
+    success:true,
+    message:'Successfully Updated User Details',
+    user
+  })
+
+})
 
 
 
@@ -200,5 +267,7 @@ export {
     logout,
     forgotPassword,
     passwordReset,
-    userDetails
+    userDetails,
+    updatePassword,
+    updateDetails
 }
