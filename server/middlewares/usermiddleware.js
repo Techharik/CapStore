@@ -23,6 +23,15 @@ console.log(token )
 
 }
 
+const coustomRole =(...roles)=>{
+   return (req,res,next)=>{
+        if(!roles.includes(req.user.role)){
+             next(new Error("You don't have access to this dashboard" ))
+        }
+         next()
+    }
+}
+
 
 
 
@@ -31,7 +40,8 @@ console.log(token )
 
 
 export {
-    isLoggedIn
+    isLoggedIn,
+    coustomRole
 }
 
 

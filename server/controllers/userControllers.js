@@ -156,7 +156,7 @@ const passwordReset = BigPromises( async (req, res, next )=>{
  
  user.password = newpassword;
 
- user.forgotPasswordToken = undefined;
+ user.forgottedPasswordToken = undefined;
  user.forgotPasswordExpiry = undefined;
 
  await user.save();
@@ -172,7 +172,7 @@ const passwordReset = BigPromises( async (req, res, next )=>{
 
 const userDetails = BigPromises(async (req, res, next) =>{
     const id = req.user.id;
-
+    console.log(req.user)
     const user = await User.findById(req.user.id);
 
     res.status(200).json({
@@ -187,7 +187,7 @@ const updatePassword = BigPromises(async(req,res, next)=>{
 
   const user = await User.findById(id).select("+password");
 
- const oldPasswordCheck = user.isValidatePassword(req.body.oldPassword)
+ const oldPasswordCheck = user.isValidatePassword(req.body.oldpassword)
 
   if(!oldPasswordCheck){
     return next(new Error("Old password is incorrect",402))
@@ -254,11 +254,86 @@ const updateDetails = BigPromises(async(req, res, next)=>{
 
 
 
+const adminAllUsers = BigPromises(async(req,res,next)=>{
+  const user = await User.find();
+
+  return res.status(200).json({
+    success:true,
+    message:'Welcome to Admin Dashboard',
+    user
+  })
+})
+
+const getSingleUser = BigPromises(async(req,res,next)=>{
+   const user_id = req.params.id;
+
+   const user = await User.findById(user_id)
+
+   if(!user){
+    return next(new Error('User is not vaild'))
+   }
+
+  return res.status(200).json({
+     success:true,
+     messgae:'Admin here is your user info',
+     user
+  })
+
+})
+
+const updateSingleUser = BigPromises(async (req,res,next)=>{
+  const user_id  = req.params.id;
+
+  const newInfo = {
+    name:req.body.name,
+    email:req.body.email,
+    role:req.body.role,
+  }
+
+  if(!req.body.name || !req.body.email || !req.body.role ){
+    return next(new Error('All the fileds are required', 401))
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(user_id,newInfo,{
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  await updatedUser.save();
+
+  return res.status(200).json({
+    success:true,
+    messgae:'Updated User successfully Admin',
+    updatedUser
+  })
+ 
+
+})
+
+const deleteSingleUser = BigPromises(async(req,res,next)=>{
+  const user_id = req.params.id;
+
+  const user = await User.findById(user_id)
 
 
+  if(!user){
+    return next(new Error('No such user Found- Admin'))
+  }
+
+  const ImageId = user.photo.id;
+
+  const deleteImage = await cloudinary.uploader.destroy(ImageId)
 
 
+  await User.findByIdAndRemove(user_id)
 
+  return res.status(200).json({
+    success:true,
+    messgage: 'User successfully deleted - Admin'
+  })
+
+})
 
 
 export {
@@ -269,5 +344,9 @@ export {
     passwordReset,
     userDetails,
     updatePassword,
-    updateDetails
-}
+    updateDetails,
+    adminAllUsers,
+    getSingleUser,
+    updateSingleUser,
+    deleteSingleUser
+  }
