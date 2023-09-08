@@ -30,7 +30,7 @@ photos:[
 ],
 category:{
     type:String,
-    enum:['cotton','leather','Woolen','Vegan'],
+    enum:['cotton','leather','wollen','Vegan'],
     required:[true,"Please select the cap from the given category"]
 },
 brand:{
