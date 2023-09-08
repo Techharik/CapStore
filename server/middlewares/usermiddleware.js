@@ -4,7 +4,7 @@ import User from '../models/user.js'
 const isLoggedIn =async function (req,res,next){
     const token  = req.cookies.token || ''
 
-console.log(token )
+
     if( !token && req.header("Authorization")){
         token = req.header('Authorization')?.replace('Bearer ','')
     }
@@ -26,7 +26,7 @@ console.log(token )
 const coustomRole =(...roles)=>{
    return (req,res,next)=>{
         if(!roles.includes(req.user.role)){
-             next(new Error("You don't have access to this dashboard" ))
+              next(new Error("You don't have access to this dashboard" ))
         }
          next()
     }

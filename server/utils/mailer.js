@@ -11,16 +11,7 @@ const mailer = async ({message,email,subject})=>{
         }
       });
 
-      var transport = nodemailer.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        port: 2525,
-        // secure: true,
-        auth: {
-          user: "1374e2514bb867",
-          pass: "660c7236ffd676"
-        }
-      });
-
+     
 
       const messages = {
         from: "techharik30@gmail.com", // sender address
