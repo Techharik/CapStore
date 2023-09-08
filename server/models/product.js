@@ -3,6 +3,7 @@ import mongoose, { Schema,model } from "mongoose";
 
 
 const productSchema = new Schema({
+
 name:{
     type: String,
     required:[true,"Please enter the name of the Product"]
