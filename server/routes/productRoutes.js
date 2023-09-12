@@ -1,7 +1,7 @@
 import express from 'express';
 const Router = express.Router();
 import { addProduct ,userSearchProduct,getSingleProduct,adminGetAllProducts,
-    adminUpdateOnProducts,deleteProduct,addReviewproduct} from '../controllers/productControllers.js';
+    adminUpdateOnProducts,deleteProduct,addReviewproduct,deleteReview} from '../controllers/productControllers.js';
 
 
 import { isLoggedIn } from '../middlewares/usermiddleware.js';
@@ -13,7 +13,8 @@ import { coustomRole } from '../middlewares/usermiddleware.js';
 
 Router.get('/searchproducts',isLoggedIn,userSearchProduct)
 Router.get('/user/getoneproduct/:id',isLoggedIn,getSingleProduct)
-Router.post('/user/addreview/',isLoggedIn,addReviewproduct)
+Router.put('/user/addreview/',isLoggedIn,addReviewproduct)
+Router.delete('/user/deletereview/',isLoggedIn,deleteReview)
 
 //admin
 Router.post('/admin/addproduct',isLoggedIn,coustomRole('admin'),addProduct)

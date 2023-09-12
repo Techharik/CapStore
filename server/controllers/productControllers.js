@@ -73,7 +73,7 @@ const addReviewproduct = BigPromises(async(req,res,next)=>{
    product.numberOfReviews = product.reviews.length
  }
 
- product.rating = product.reviews.reduce((acc,item)=> item.rating +acc,0 ) / product.reviews.length
+ product.ratings = product.reviews.reduce((acc,item)=> item.rating +acc,0 ) / product.reviews.length
 
  await product.save({validateBeforeSava:false})
 
@@ -85,13 +85,40 @@ const addReviewproduct = BigPromises(async(req,res,next)=>{
 
 })
 
+const deleteReview = BigPromises(async(req,res,next)=>{
+   
+
+  const {productId } = req.query;
 
 
+ const product  = await Products.findById(productId)
 
+ const reviews = product.reviews.filter(
+  (rev)=> rev.user.toString() !== req.user._id.toString()
+ )
 
+const numberOfReviews = reviews.length;
 
+ product.ratings = reviews.reduce((acc,item)=>item.rating + acc,0) / numberOfReviews
 
+const deleteReview = await Products.findByIdAndUpdate(productId,{
+  reviews,
+  numberOfReviews
+},
+{
+  new: true,
+  runValidators: true,
+  useFindAndModify: false,
+}
+)
 
+ res.status(200).json({
+  success:true,
+  message: 'Review deleted successfully',
+  deleteReview
+ })
+
+})
 
 
 //admin controllers
@@ -234,5 +261,6 @@ export {
     adminGetAllProducts,
     adminUpdateOnProducts,
     deleteProduct,
-    addReviewproduct
+    addReviewproduct,
+    deleteReview
 }
