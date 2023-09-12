@@ -20,7 +20,6 @@ const isLoggedIn =async function (req,res,next){
     
     next()
 
-
 }
 
 const coustomRole =(...roles)=>{
