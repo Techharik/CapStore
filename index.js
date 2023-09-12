@@ -35,12 +35,14 @@ app.use(morgan("tiny"));
 
 import home from './server/routes/userRoutes.js'
 import product from './server/routes/productRoutes.js'
+import order from './server/routes/orderRoutes.js'
 
 
 
 
 app.use('/api/v1',home)
 app.use('/api/v1',product)
+app.use('/api/v1',order)
 
 
 

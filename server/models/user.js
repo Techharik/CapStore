@@ -88,7 +88,7 @@ userSchema.methods.getForgotPasswordToken=function(){
 
 
 
-const User = new model('user',userSchema)
+const User = new model('User',userSchema)
 
 export default User;
 

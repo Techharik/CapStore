@@ -83,6 +83,6 @@ createdAt:{
 })
 
 
-const Products = new model('products',productSchema)
+const Products = new model('Product',productSchema)
 
 export default Products;

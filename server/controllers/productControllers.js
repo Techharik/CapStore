@@ -121,6 +121,20 @@ const deleteReview = await Products.findByIdAndUpdate(productId,{
 })
 
 
+
+const getOnlyoneProductReview = BigPromises(async (req,res,next)=>{
+     const product = await Products.findById(req.query.id)
+
+
+     res.status(200).json({
+      success:true,
+      message:'Reviews of one Product',
+      reviews:product.reviews
+     })
+})
+
+
+
 //admin controllers
 
 const addProduct = BigPromises(async (req,res,next)=>{
@@ -262,5 +276,6 @@ export {
     adminUpdateOnProducts,
     deleteProduct,
     addReviewproduct,
-    deleteReview
+    deleteReview,
+    getOnlyoneProductReview
 }

@@ -1,7 +1,15 @@
 import express from 'express';
 const Router = express.Router();
-import { addProduct ,userSearchProduct,getSingleProduct,adminGetAllProducts,
-    adminUpdateOnProducts,deleteProduct,addReviewproduct,deleteReview} from '../controllers/productControllers.js';
+import { addProduct ,
+    userSearchProduct,
+    getSingleProduct,
+    adminGetAllProducts,
+    adminUpdateOnProducts,
+    deleteProduct,
+    addReviewproduct,
+    deleteReview,
+    getOnlyoneProductReview
+} from '../controllers/productControllers.js';
 
 
 import { isLoggedIn } from '../middlewares/usermiddleware.js';
@@ -15,6 +23,10 @@ Router.get('/searchproducts',isLoggedIn,userSearchProduct)
 Router.get('/user/getoneproduct/:id',isLoggedIn,getSingleProduct)
 Router.put('/user/addreview/',isLoggedIn,addReviewproduct)
 Router.delete('/user/deletereview/',isLoggedIn,deleteReview)
+
+//getOneProducts Review
+Router.get('/user/getproductreviews/',isLoggedIn,getOnlyoneProductReview)
+
 
 //admin
 Router.post('/admin/addproduct',isLoggedIn,coustomRole('admin'),addProduct)
