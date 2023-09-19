@@ -444,8 +444,108 @@ paths:
                      user:
                        type: object
            400:
-             description: Bad Reuqest
+              description: Bad Reuqest
            500:
-             description: Internal server Error
+              description: Internal server Error
              
+  /searchproducts:
+    get:
+      tags:
+         - products
+      summary: Search a get request will give you all products
+      requestBody:
 
+      responses:
+        200:
+          description: view all the searched products
+          content:
+            application/json:
+             schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  filteredProductNumber:
+                    type: number
+                  totalcountProduct:
+                    type: number
+                  products:
+                    type: array
+                    items:
+                      type: object
+        400:
+          description: Bad Reuqest
+        500:
+          description: Internal server Error
+
+  /user/getoneproduct/{id}:
+   get:
+     tags:
+       - products
+     summary: Get the single product information
+     parameters:
+            - name : id
+              in   : path
+              required : true
+              schema:
+                type: string
+     requestBody:
+
+     responses:
+       200:
+         description: Sucessfully recievd the data of single user
+         content:
+          application/json:
+             type: object
+             properties:
+               success:
+                 type: boolean
+               product:
+                 type: object
+
+  /user/addreview/:
+    put:
+      tags:
+        - products
+      summary:  Add review for a product
+
+      requestBody:
+           content:
+            application/json:
+             schema:
+              type: object
+              required:
+                - rating
+                - productId
+                - comment
+              properties:
+                rating:
+                  type: number
+                  required: true
+                comment:
+                  type: string
+                  required: true
+                productId:
+                 type: string
+                 required: true
+
+      responses:
+           200:
+             description: update the user review of the products
+             content:
+               application/json:
+                 schema:
+                   type: object
+                   properties:
+                     success:
+                       type: boolean
+                     message:
+                       type: string
+                     product :
+                       type: object
+           400:
+              description: Bad Reuqest
+           500:
+              description: Internal server Error
+
+  
